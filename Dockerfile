@@ -9,26 +9,26 @@ RUN apt-get update && apt-get install -y \
 RUN a2enmod rewrite
 
 # Set Laravel's public directory as Apache web root
-ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 
 # Update Apache config
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/000-default.conf \
     && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy app
-COPY . /var/www/html
+# Copy app files
+COPY . .
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Run Composer install
-RUN composer install --optimize-autoloader --no-dev
+# Install dependencies
+RUN composer install --no-dev --optimize-autoloader
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 EXPOSE 80

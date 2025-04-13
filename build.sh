@@ -2,7 +2,6 @@
 
 echo "Starting Laravel deployment build..."
 
-# Run Laravel setup
 php artisan config:clear
 php artisan cache:clear
 php artisan config:cache
