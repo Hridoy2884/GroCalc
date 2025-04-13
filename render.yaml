@@ -1,13 +1,9 @@
 services:
   - type: web
-    name: grocalc
-    env: php
+    name: GroCalc
+    env: docker
+    region: oregon
+    plan: free
+    dockerfilePath: ./Dockerfile
     buildCommand: "./build.sh"
     startCommand: "apache2-foreground"
-    envVars:
-      - key: APP_ENV
-        value: production
-      - key: APP_KEY
-        sync: false
-      - key: DB_CONNECTION
-        value: sqlite
