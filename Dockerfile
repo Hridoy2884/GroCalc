@@ -1,9 +1,9 @@
 FROM php:8.2-apache
 
-# Install dependencies
+# Install dependencies, including ext-intl for Filament
 RUN apt-get update && apt-get install -y \
-    zip unzip git curl libzip-dev libpng-dev libonig-dev libxml2-dev \
-    && docker-php-ext-install pdo pdo_mysql zip
+    zip unzip git curl libzip-dev libpng-dev libonig-dev libxml2-dev libicu-dev \
+    && docker-php-ext-install pdo pdo_mysql zip intl
 
 # Enable Apache Rewrite Module
 RUN a2enmod rewrite
