@@ -1,9 +1,10 @@
 FROM php:8.2-apache
 
-# Install dependencies, including ext-intl for Filament
+# Install dependencies, including ext-intl for Filament and PostgreSQL drivers
 RUN apt-get update && apt-get install -y \
     zip unzip git curl libzip-dev libpng-dev libonig-dev libxml2-dev libicu-dev \
-    && docker-php-ext-install pdo pdo_mysql zip intl
+    libpq-dev \
+    && docker-php-ext-install pdo pdo_mysql zip intl pdo_pgsql pgsql
 
 # Enable Apache Rewrite Module
 RUN a2enmod rewrite
@@ -19,7 +20,7 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-av
 WORKDIR /var/www/html
 
 # Copy app files
-COPY . .
+COPY . ./
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
